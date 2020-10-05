@@ -10,3 +10,8 @@ WORKDIR /zap
 
 RUN gradle :zap:distLinux
 
+RUN tar xzvf  ./zap/build/distributions/ZAP_2.9.0_Linux.tar.gz
+
+RUN mkdir -p /opt/zap
+RUN mv ZAP_2.9.0/* /opt/zap/
+
