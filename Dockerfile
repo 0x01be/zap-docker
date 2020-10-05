@@ -1,4 +1,4 @@
-FROM 0x01be/gradle
+FROM 0x01be/gradle:5.4.1
 
 RUN apk add --no-cache --virtual zap-build-dependencies \
     git
