@@ -1,17 +1,19 @@
-FROM 0x01be/gradle:5.4.1
+FROM 0x01be/zap:build as build
 
-RUN apk add --no-cache --virtual zap-build-dependencies \
-    git
+FROM 0x01be/xpra
 
-ENV ZAP_REVISION master
-RUN git clone --depth 1 --branch ${ZAP_REVISION} https://github.com/zaproxy/zaproxy.git /zap
+COPY --from=build /opt/zap/ /opt/zap/
 
-WORKDIR /zap
+USER root
 
-RUN gradle :zap:distLinux
+RUN apk add --no-cache --virtual zap-runtime-dependencies \
+    openjdk8-jre \
+    firefox-esr \
+    bash
 
-RUN tar xzvf  ./zap/build/distributions/ZAP_2.9.0_Linux.tar.gz
+USER xpra
 
-RUN mkdir -p /opt/zap
-RUN mv ZAP_2.9.0/* /opt/zap/
+ENV PATH ${PATH}:/opt/zap/
+
+ENV COMMAND "zap.sh"
 
